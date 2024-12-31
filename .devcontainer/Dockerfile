@@ -5,8 +5,9 @@ usbutils \
 python3-pip \
 python3-setuptools \
 python3-venv \
+linux-tools-virtual \
+hwdata \
 udev \
-kmod
 mc \
 && apt-get clean
 
