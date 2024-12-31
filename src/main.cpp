@@ -4,33 +4,29 @@
 #include "driver/uart.h"
 #include "driver/gpio.h"
 #include "esp_sleep.h"
-#include "FastLED.h"
 
-#define M0 0
-#define M1 1
-#define AUX 3
-#define LED_DATA_PIN 8
-#define NUM_LEDS 1
+#define M0 8
+#define M1 9
+#define AUX 4
 
 #define TXD2 7 
 #define RXD2 6
 
-#define LID 4 //RTC wakeup is available on GPIO0-GPIO5
-#define DOOR 5
+#define LID 2 //RTC wakeup is available on GPIO0-GPIO5
+#define DOOR 3
 
 #define FULL 0x55
 #define EMPTY 0xAA
 #define ACKNOWLEDGE 0x25
 
 //define LED
-CRGB leds[NUM_LEDS];
+#define LED 10
 
 //Will wake up when "LID" or "DOOR" pins go HIGH
 #define DEEP_SLEEP_GPIO_ANY_HIGH
 
 gpio_num_t LID_GPIO = (gpio_num_t)LID;
 gpio_num_t DOOR_GPIO = (gpio_num_t)DOOR;
-gpio_num_t LED_GPIO = (gpio_num_t)LED_DATA_PIN;
 
 // keep track of how many times we've come out of deep sleep
 RTC_DATA_ATTR int sleep_count = 0;
@@ -229,10 +225,9 @@ Serial.begin(9600);
   pinMode(M0, OUTPUT);
   pinMode(M1, OUTPUT);
   pinMode(AUX, INPUT_PULLUP);
-  pinMode(LED_DATA_PIN, OUTPUT);
+  pinMode(LED, OUTPUT);
 
-  FastLED.addLeds<WS2812B,LED_DATA_PIN, RGB>(leds, NUM_LEDS); 
-  FastLED.setBrightness(100); // Define LED 
+  
    
 
 // Check if first setup
@@ -255,22 +250,7 @@ Serial.begin(9600);
       Serial1.write(EMPTY);
       Serial1.flush();
 
-    //leds[0] = CRGB::Green;    // Set the LED to red
-    //FastLED.show();         // Update the LED
-    //delay(1000);
-
-    //leds[0] = CRGB::Red;  // Set the LED to green
-    //FastLED.show();
-    //delay(1000);
-
-    //leds[0] = CRGB::Blue;   // Set the LED to blue
-    //FastLED.show();
-    //delay(1000);
-
-    //leds[0] = CRGB::Black;  // Turn the LED off
-    //FastLED.show();
-    //delay(1000);
-  
+    
     
 
     }
@@ -282,12 +262,9 @@ Serial.begin(9600);
 void loop()
 {
 
-    leds[0] = CRGB::Blue;   // Set the LED to blue
-    FastLED.show();
+    digitalWrite(LED, HIGH);  // Turn LED on
     delay(1000);
-
-    leds[0] = CRGB::Black;  // Turn the LED off
-    FastLED.show();
+    digitalWrite(LED, LOW);  // Turn LED off
   
 
 
